@@ -96,3 +96,121 @@ const CURATED: MockTrack[] = [
   { id: "s7", title: "London Fog",       artist: "Ash",        region: "UK",     genre: "Rock",   mood: "Dark",     category: "Solo", duration: 232, bpm: 116,color: "#475569", src: AUDIO(14) },
   { id: "s8", title: "Cassette Future",  artist: "Volt",       region: "Global", genre: "Lo-Fi",  mood: "Chill",    category: "Solo", duration: 224, bpm: 82, color: "#60a5fa", src: AUDIO(15) },
 ];
+
+// ───────────────────────────────────────────────────────────────────
+// Generated catalog — expands the library to 2000+ searchable tracks.
+// Deterministic so search results stay stable across reloads.
+// ───────────────────────────────────────────────────────────────────
+
+type Cat = MockTrack["category"];
+
+const POOLS: Record<Cat, { artists: string[]; titles: string[]; region: string; genre: string }> = {
+  Bollywood: {
+    region: "India",
+    genre: "Bollywood",
+    artists: ["Arijit Singh","Shreya Ghoshal","Pritam","A.R. Rahman","Neha Kakkar","Atif Aslam","Sonu Nigam","Vishal-Shekhar","Sachin-Jigar","Jubin Nautiyal","Armaan Malik","Darshan Raval","Tanishk Bagchi","Amit Trivedi","Shankar-Ehsaan-Loy","Mohit Chauhan","KK","Sunidhi Chauhan","Asees Kaur","Palak Muchhal","Badshah","Honey Singh","Raghav Chaitanya","Stebin Ben","Dhvani Bhanushali","Nikhita Gandhi","Jonita Gandhi","Benny Dayal","Mika Singh","Kailash Kher"],
+    titles: ["Tum Hi Ho","Kesariya","Channa Mereya","Apna Bana Le","Raataan Lambiyan","Tum Se Hi","Agar Tum Saath Ho","Phir Bhi Tumko Chaahunga","Bekhayali","Hawayein","Jeene Laga Hoon","Tera Ban Jaunga","Mere Mehboob Mere Sanam","Tujh Mein Rab Dikhta Hai","Raabta","Pee Loon","Tere Bina","Saiyaara","Pehla Nasha","Chaiyya Chaiyya","Tujhe Kitna Chahne Lage","Galliyan","Sun Raha Hai","Mast Magan","Manwa Laage","Jashn-e-Bahara","Iktara","Nadaan Parindey","Yeh Honsla","Kabira","Phir Le Aaya Dil","Tere Sang Yaara","Ban Ja Rani","Mere Naam Tu","Ghungroo","Malang","Tere Liye","Ae Watan","Zara Sa","Khairiyat","Tum Mile","Tujhko Jo Paya","Tu Hi Re","Roke Na Ruke","Aaj Phir","Bolna","Sajna","Janam Janam","Halka Halka","Tera Yaar Hoon Main","Dil Diyan Gallan","Tere Hawaale","Tum Kya Mile","Heeriye","Ranjha","Maan Meri Jaan","Pasoori","Mehrama","Sham","Ve Maahi","O Saathi"],
+  },
+  Punjabi: {
+    region: "India",
+    genre: "Punjabi",
+    artists: ["AP Dhillon","Diljit Dosanjh","Karan Aujla","Sidhu Moose Wala","Shubh","Talwiinder","NDS","Gurinder Gill","Babbu Maan","Jazzy B","Hardy Sandhu","Guru Randhawa","Jasmine Sandlas","Garry Sandhu","Prem Dhillon","Amrit Maan","Ranjit Bawa","Ammy Virk","Mankirt Aulakh","Parmish Verma","Inder Chahal","B Praak","Jass Manak","Bohemia","Imran Khan","Maninder Buttar","Khan Saab","Akhil","Sharry Mann","Kambi Rajpuria"],
+    titles: ["Brown Munde","Excuses","Insane","Tauba Tauba","Softly","Laembadgini","G.O.A.T.","295","Jhol","Husn","Raat Di Gedi","Lover","Jugni","Patiala Peg","Outfit","Without You","Daku","Cheques","Admirin' You","No Love","Elevated","High Rated Gabru","Suit Suit","Lahore","Made In India","Slowly Slowly","Ishare Tere","Yaarian","Chitta Kurta","Coka","Sip Sip","Dollar","Naah","Backbone","Soch","Tere Naal Rehna","Pind Aale Yaar","Born To Shine","8 Asle","Dakuaan Da Munda","52 Bars","Players","Sukoon","Sahiba","Kya Baat Ay","Joker","Goliyan","Designer","Kalla Sohna Nai","Tu Ne Maari Entriyaan","Kade Kade","Same Beef","So High","Old Skool","Bamb Aagya","Snitches","Vibe","Dior","Antidote"],
+  },
+  Hollywood: {
+    region: "USA",
+    genre: "Pop",
+    artists: ["Taylor Swift","The Weeknd","Drake","Dua Lipa","Billie Eilish","Ariana Grande","Ed Sheeran","Post Malone","Bruno Mars","Justin Bieber","Olivia Rodrigo","Sabrina Carpenter","Doja Cat","SZA","Harry Styles","Adele","Beyoncé","Rihanna","Travis Scott","Kendrick Lamar","Coldplay","Imagine Dragons","Maroon 5","Lana Del Rey","Lady Gaga","Miley Cyrus","Charlie Puth","Shawn Mendes","Selena Gomez","Camila Cabello","Halsey","Khalid","Bebe Rexha","Zayn","Bad Bunny","Future","Travis Barker","David Guetta","Calvin Harris","Marshmello","Kygo","Avicii","Linkin Park","Eminem","J. Cole"],
+    titles: ["Blinding Lights","Flowers","Anti-Hero","Cruel Summer","As It Was","Espresso","God's Plan","Stay","Levitating","Bad Habit","Save Your Tears","Watermelon Sugar","Shape of You","Sunflower","Peaches","Heat Waves","Calm Down","Unholy","Vampire","Houdini","Paint The Town Red","Greedy","Lose Control","Snooze","Kill Bill","About Damn Time","Industry Baby","Stay With Me","Despacito","Senorita","Believer","Thunder","Demons","Radioactive","Counting Stars","Memories","Sugar","Girls Like You","Animals","Payphone","Photograph","Perfect","Thinking Out Loud","Castle on the Hill","Bad Blood","Look What You Made Me Do","Lover","Willow","Cardigan","Bejeweled","Karma","Style","Wildest Dreams","Shake It Off","All Too Well","Enchanted","August","The 1","Exile","Champagne Problems","Vigilante Shit","Mastermind","Snow on the Beach","Lavender Haze","Maroon","Midnight Rain"],
+  },
+  "K-Pop": {
+    region: "Korea",
+    genre: "K-Pop",
+    artists: ["BTS","BLACKPINK","TWICE","NewJeans","Stray Kids","SEVENTEEN","ENHYPEN","TXT","aespa","ITZY","IVE","LE SSERAFIM","(G)I-DLE","Red Velvet","EXO","NCT 127","NCT Dream","ATEEZ","TREASURE","MAMAMOO","IU","TAEYEON","ROSÉ","JISOO","JENNIE","LISA","Jungkook","Jimin","V","J-Hope","RM","Suga","BoA","PSY","Zico"],
+    titles: ["Dynamite","Butter","Permission to Dance","Boy With Luv","Fake Love","DNA","Idol","Mic Drop","Spring Day","How You Like That","Kill This Love","Pink Venom","Shut Down","Pretty Savage","Lovesick Girls","Ice Cream","Ddu-Du Ddu-Du","Whistle","As If It's Your Last","Playing With Fire","Stay","Fancy","Talk That Talk","I Can't Stop Me","Cheer Up","TT","Like Ooh-Ahh","Heart Shaker","What is Love?","Yes or Yes","Feel Special","Hype Boy","Attention","Ditto","Cookie","OMG","Super Shy","ETA","Get Up","God's Menu","Back Door","Thunderous","Maniac","Case 143","Topline","S-Class","Lalalala","Chk Chk Boom","Walkin' On Water","Drunk-Dazed","Polaroid Love","Bite Me","Future Perfect","Fever","Sweet Venom","Bills","Antifragile","Unforgiven","Fearless","Eve, Psyche & The Bluebeard's Wife","Smart","Easy","Tomboy","Nxde","Queencard","Allergy","I Want That","Power Up","Psycho","Feel My Rhythm","Birthday","Chill Kill"],
+  },
+  Latin: {
+    region: "Latin America",
+    genre: "Latin",
+    artists: ["Bad Bunny","J Balvin","Karol G","Shakira","Rosalía","Maluma","Ozuna","Daddy Yankee","Anuel AA","Rauw Alejandro","Feid","Quevedo","Peso Pluma","Manuel Turizo","Sebastián Yatra","Camilo","Becky G","Natti Natasha","Nicky Jam","Luis Fonsi","Marc Anthony","Ricky Martin","Romeo Santos","Prince Royce","Enrique Iglesias","Carlos Vives","Juanes","Maná","Reik","Aventura"],
+    titles: ["Despacito","Tití Me Preguntó","Me Porto Bonito","Moscow Mule","Efecto","Provenza","TQG","Mi Ex Tenía Razón","Bichota","Mamiii","Tusa","Hawái","Felices los 4","Mi Gente","X","Con Calma","Dura","Gasolina","Limbo","Vivir Mi Vida","Bailando","La Tortura","Waka Waka","Hips Don't Lie","Loca","Chantaje","Me Enamoré","Despechá","Bzrp Music Sessions","Saoko","Hentai","Motomami","La Fama","Calma","Pareja del Año","La Bachata","El Merengue","Pepas","La Jeepeta","Yonaguni","Dakiti","Safaera","Yo Perreo Sola","La Romana","Callaita","Soy Peor","Vete","Adicto","Reloj","Sigues Con Él","Tattoo","Loco Contigo","Taki Taki","I Like It","I Like Me Better","La Modelo","Te Boté","Felices los 4","Sin Pijama","Criminal"],
+  },
+  Afrobeats: {
+    region: "Nigeria",
+    genre: "Afrobeats",
+    artists: ["Burna Boy","Wizkid","Davido","Rema","Tems","Asake","CKay","Omah Lay","Fireboy DML","Joeboy","Tiwa Savage","Yemi Alade","Mr Eazi","Adekunle Gold","Simi","Olamide","Patoranking","Runtown","Kizz Daniel","Ayra Starr","Black Sherif","Sarkodie","Stonebwoy","Shatta Wale","Diamond Platnumz"],
+    titles: ["Last Last","Calm Down","Essence","Peru","Finesse","Sungba","Terminator","Bandana","Joha","Organise","Soso","Rush","Bloody Samaritan","Ginger","Love Nwantiti","Understand","On The Low","Beggie Beggie","Ku Lo Sa","Buga","Common Person","Bandana","Amapiano","Yebba's Heartbreak","Anoti","People","Damages","All Over","Mama","Soco","Daddy Yo","Mad Over You","Fall","If","FEM","Wonderful","Bounce","Loaded","Pana","Mr Money","Kwaku The Traveller","Second Sermon","Konongo Zongo","Sad Girlz Luv Money","Sungba Remix","Peace Be Unto You","2 Sugar"],
+  },
+  Album: {
+    region: "Global",
+    genre: "Cinematic",
+    artists: ["Vael","NULLR","AURA","Zahir","Volt","Hans Zimmer","Ludwig Göransson","Ramin Djawadi","M83","ODESZA","Bonobo","Tycho","Nils Frahm","Ólafur Arnalds","Max Richter","Jon Hopkins","Float","Glasswave","Solaris","Echoform","Nova Drift","Vermilion","Cobalt","Lumen","Atlas Sky","Ironwave","Skyglass","Silent Era","Northwind","Polaris"],
+    titles: ["Crimson Orbit","Iron Sky","Shadow Protocol","Echo Chamber","Glass Tower","Desert Mirage","Solar Flare","Pulse Rider","Event Horizon","Aurora Drift","Northern Lights","Subzero","Obsidian","Lunar Tide","Quantum Field","Helix","Vector","Parallax","Continuum","Threshold","Nebula","Phoenix Rising","Tundra","Monolith","Cathedral","Architect","Concrete Sky","Iron Heart","Steel Rain","Cobalt Dream","Velvet Storm","Onyx","Marble","Granite","Ember","Halcyon","Reverie","Mirage","Cascade","Verglas","Wraith","Phantom Limb","Silent Engine","Black Sun","Aether","Sunder","Tempest","Origin","Foundation","Singularity","Apex","Genesis","Exodus","Outpost","Frontier","Polaris","Northstar","Lighthouse","Anchor","Compass"],
+  },
+  Solo: {
+    region: "Global",
+    genre: "Indie",
+    artists: ["Kaito Mori","Yuki","Lune","Mira","Ash","Volt","Ren","Sora","Hana","Kai","Ivy","Wren","Sage","Juno","Cleo","Niko","Theo","Eli","Nova","Indi","Otis","Rome","Sol","Vera","Wilder","Yara","Zane","Aria","Bex","Cora","Dax","Echo","Fox","Greta","Halo","Iris","Jude","Knox","Lyra","Mara","Nash","Onyx","Pax","Quinn","Reese","Sable","Tora","Una","Vale","Wynn","Xan","Yael","Zia"],
+    titles: ["Midnight Drift","Sakura Drift","Paris After Dark","Last Train Home","Velvet Static","Pastel Dreams","London Fog","Cassette Future","Coffee & Rain","Slow Burn","Soft Focus","Window Seat","Empty Rooms","Quiet Hours","Long Way Home","Off The Map","Saltwater","Lavender","Goldenrod","Bluebell","Wildflower","Driftwood","Seashell","Tidepool","Cliffside","Hollow","Lantern","Embers","First Snow","Almost Spring","Late August","September Soft","October Sky","November Sun","Year of the Cat","Telephones","Postcards","Polaroids","Old Films","Home Movies","Backyard","Front Porch","Garden Bed","Stargazer","Daydream","Sleepwalk","Heartbeat","Wide Awake","Wishbone","Hourglass","Paper Plane","Folded Notes","Letter Box","Open Window","Half Light","Soft Edges","Slow Dance","Closer","Linger","Stay Awhile"],
+  },
+};
+
+const MOODS_BY_GENRE: Record<string, string[]> = {
+  Bollywood: ["Romantic","Energetic","Sad","Uplifting"],
+  Punjabi: ["Energetic","Chill","Romantic","Dark"],
+  Pop: ["Energetic","Chill","Uplifting","Romantic"],
+  "K-Pop": ["Energetic","Uplifting","Romantic","Chill"],
+  Latin: ["Energetic","Romantic","Uplifting","Chill"],
+  Afrobeats: ["Chill","Energetic","Uplifting","Romantic"],
+  Cinematic: ["Epic","Dark","Mysterious","Uplifting"],
+  Indie: ["Chill","Romantic","Sad","Mysterious"],
+};
+
+const COLORS = ["#f97316","#f59e0b","#ef4444","#a855f7","#ec4899","#fb7185","#f472b6","#eab308","#22d3ee","#34d399","#60a5fa","#f43f5e","#facc15","#a78bfa","#22c55e","#84cc16","#10b981","#fb923c","#06b6d4","#8b5cf6","#3b82f6","#e879f9","#0ea5e9","#d97706","#94a3b8","#64748b","#475569","#c084fc","#fda4af","#fde047"];
+
+// Simple deterministic PRNG so the catalog is stable.
+let _seed = 0xC0FFEE;
+const rand = () => {
+  _seed = (_seed * 1664525 + 1013904223) >>> 0;
+  return _seed / 0xFFFFFFFF;
+};
+const pick = <T,>(arr: T[]) => arr[Math.floor(rand() * arr.length)];
+
+const VARIANT_SUFFIX = ["", " (Reprise)", " (Acoustic)", " (Remix)", " (Slowed)", " (Reverb)", " (Live)", " (Extended)", " — Pt. II", " — Pt. III", " (Lo-Fi Mix)", " (Club Edit)", " (VIP Mix)", " (Sunset Version)", " (Midnight Edit)", " (Radio Edit)", " (Orchestral)", " (Piano Version)", " (Night Mix)", " (Echo Mix)"];
+
+const TOTAL_GENERATED = 2050;
+const GENERATED: MockTrack[] = [];
+const cats = Object.keys(POOLS) as Cat[];
+
+for (let i = 0; i < TOTAL_GENERATED; i++) {
+  const cat = cats[i % cats.length];
+  const pool = POOLS[cat];
+  const baseTitle = pool.titles[Math.floor(rand() * pool.titles.length)];
+  const suffix = rand() < 0.55 ? "" : VARIANT_SUFFIX[Math.floor(rand() * VARIANT_SUFFIX.length)];
+  const artist = pool.artists[Math.floor(rand() * pool.artists.length)];
+  const secondary = rand() < 0.18 ? ` · ${pool.artists[Math.floor(rand() * pool.artists.length)]}` : "";
+  const moodPool = MOODS_BY_GENRE[pool.genre] || MOODS;
+  GENERATED.push({
+    id: `g${i + 1}`,
+    title: (baseTitle + suffix).trim(),
+    artist: artist + secondary,
+    region: pool.region,
+    genre: pool.genre,
+    mood: moodPool[Math.floor(rand() * moodPool.length)],
+    category: cat,
+    duration: 150 + Math.floor(rand() * 180),
+    bpm: 70 + Math.floor(rand() * 90),
+    color: pick(COLORS),
+    src: AUDIO(i + 1),
+  });
+}
+
+// De-duplicate by title + artist while preserving curated order at the top.
+const _seen = new Set<string>();
+export const MOCK_TRACKS: MockTrack[] = [...CURATED, ...GENERATED].filter((t) => {
+  const k = `${t.title.toLowerCase()}|${t.artist.toLowerCase()}`;
+  if (_seen.has(k)) return false;
+  _seen.add(k);
+  return true;
+});
+

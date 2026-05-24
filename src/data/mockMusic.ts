@@ -5,16 +5,16 @@ export type MockTrack = {
   region: string;
   genre: string;
   mood: string;
-  category: "Bollywood" | "Hollywood" | "Album" | "Solo" | "K-Pop" | "Latin" | "Afrobeats";
+  category: "Bollywood" | "Punjabi" | "Hollywood" | "Album" | "Solo" | "K-Pop" | "Latin" | "Afrobeats";
   duration: number; // seconds
   bpm: number;
   color: string;
   src: string; // real playable audio URL
 };
 
-export const GENRES = ["Pop", "Hip-Hop", "Cinematic", "Lo-Fi", "EDM", "Afrobeats", "K-Pop", "Latin", "Bollywood", "Ambient", "Rock", "Jazz", "R&B", "Indie"];
+export const GENRES = ["Pop", "Hip-Hop", "Cinematic", "Lo-Fi", "EDM", "Afrobeats", "K-Pop", "Latin", "Bollywood", "Punjabi", "Ambient", "Rock", "Jazz", "R&B", "Indie"];
 export const MOODS = ["Energetic", "Chill", "Epic", "Romantic", "Dark", "Uplifting", "Mysterious", "Sad"];
-export const CATEGORIES = ["Bollywood", "Hollywood", "Album", "Solo", "K-Pop", "Latin", "Afrobeats"] as const;
+export const CATEGORIES = ["Bollywood", "Punjabi", "Hollywood", "Album", "Solo", "K-Pop", "Latin", "Afrobeats"] as const;
 
 // SoundHelix free CC audio examples — 16 tracks we cycle through for previews.
 const AUDIO = (n: number) =>

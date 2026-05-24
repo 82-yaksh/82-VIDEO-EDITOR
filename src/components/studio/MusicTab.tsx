@@ -146,12 +146,87 @@ export function MusicTab() {
             </motion.div>
           );
         })}
-        {tracks.length === 0 && (
+        {tracks.length === 0 && suggestions.length === 0 && (
           <div className="text-center text-[11px] text-muted-foreground py-6">No tracks match your filters.</div>
+        )}
+        {tracks.length === 0 && suggestions.length > 0 && (
+          <div className="space-y-2">
+            <div className="text-[11px] text-muted-foreground px-1">
+              No exact match for "<span className="text-foreground">{q}</span>". Did you mean:
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {suggestions.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setQ(t.title)}
+                  className="text-[11px] px-2 py-1 rounded-full border border-[oklch(0.7_0.22_280_/_0.5)] hover:border-[oklch(0.7_0.27_330)] bg-[oklch(0.16_0.04_275)] transition"
+                >
+                  <span className="font-medium">{t.title}</span>
+                  <span className="text-muted-foreground"> · {t.artist}</span>
+                </button>
+              ))}
+            </div>
+          </div>
         )}
       </div>
     </div>
   );
+}
+
+// ───── Fuzzy search helpers ─────
+function lev(a: string, b: string): number {
+  if (a === b) return 0;
+  if (!a.length) return b.length;
+  if (!b.length) return a.length;
+  const dp = Array.from({ length: a.length + 1 }, (_, i) => i);
+  for (let j = 1; j <= b.length; j++) {
+    let prev = dp[0];
+    dp[0] = j;
+    for (let i = 1; i <= a.length; i++) {
+      const tmp = dp[i];
+      dp[i] = a[i - 1] === b[j - 1] ? prev : Math.min(prev, dp[i], dp[i - 1]) + 1;
+      prev = tmp;
+    }
+  }
+  return dp[a.length];
+}
+function sim(a: string, b: string): number {
+  const m = Math.max(a.length, b.length);
+  return m ? 1 - lev(a, b) / m : 1;
+}
+function trackFields(t: MockTrack): string[] {
+  return [t.title, t.artist, t.region, t.genre, t.category, t.mood].map((s) => s.toLowerCase());
+}
+function scoreTrack(t: MockTrack, ql: string, tokens: string[]): number {
+  const fields = trackFields(t);
+  let score = 0;
+  for (const f of fields) {
+    if (f === ql) score += 100;
+    else if (f.includes(ql)) score += 50;
+  }
+  for (const tok of tokens) {
+    for (const f of fields) {
+      for (const w of f.split(/[\s·-]+/)) {
+        if (!w) continue;
+        if (w === tok) score += 20;
+        else if (w.startsWith(tok)) score += 10;
+        else if (tok.length >= 3 && w.includes(tok)) score += 5;
+      }
+    }
+  }
+  return score;
+}
+function fuzzyScore(t: MockTrack, ql: string, tokens: string[]): number {
+  const fields = trackFields(t);
+  let best = sim(fields.join(" "), ql) * 0.5;
+  for (const f of fields) {
+    best = Math.max(best, sim(f, ql));
+    for (const w of f.split(/[\s·-]+/)) {
+      if (!w) continue;
+      for (const tok of tokens) best = Math.max(best, sim(w, tok));
+    }
+  }
+  return best;
 }
 
 function Chips({

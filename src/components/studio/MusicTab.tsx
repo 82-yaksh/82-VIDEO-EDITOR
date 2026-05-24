@@ -1,31 +1,62 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { Search, Play, Pause, Plus, Check, Music2 } from "lucide-react";
-import { MOCK_TRACKS, GENRES, MOODS, type MockTrack } from "@/data/mockMusic";
+import { MOCK_TRACKS, GENRES, MOODS, CATEGORIES, type MockTrack } from "@/data/mockMusic";
 import { useEditor } from "@/store/editor";
 
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
 export function MusicTab() {
   const [q, setQ] = useState("");
+  const [category, setCategory] = useState<string | null>(null);
   const [genre, setGenre] = useState<string | null>(null);
   const [mood, setMood] = useState<string | null>(null);
   const [playing, setPlaying] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const { music, setMusic } = useEditor();
 
+  // Lazy-init audio element
+  useEffect(() => {
+    audioRef.current = new Audio();
+    audioRef.current.volume = 0.7;
+    const a = audioRef.current;
+    return () => {
+      a.pause();
+      a.src = "";
+    };
+  }, []);
+
+  const togglePlay = (t: MockTrack) => {
+    const a = audioRef.current;
+    if (!a) return;
+    if (playing === t.id) {
+      a.pause();
+      setPlaying(null);
+    } else {
+      if (a.src !== t.src) a.src = t.src;
+      a.currentTime = 0;
+      a.play().catch(() => {});
+      setPlaying(t.id);
+      a.onended = () => setPlaying(null);
+    }
+  };
+
   const tracks = useMemo(() => {
-    const ql = q.toLowerCase();
+    const ql = q.toLowerCase().trim();
     return MOCK_TRACKS.filter((t) => {
+      if (category && t.category !== category) return false;
       if (genre && t.genre !== genre) return false;
       if (mood && t.mood !== mood) return false;
       if (!ql) return true;
       return (
         t.title.toLowerCase().includes(ql) ||
         t.artist.toLowerCase().includes(ql) ||
-        t.region.toLowerCase().includes(ql)
+        t.region.toLowerCase().includes(ql) ||
+        t.genre.toLowerCase().includes(ql) ||
+        t.category.toLowerCase().includes(ql)
       );
     });
-  }, [q, genre, mood]);
+  }, [q, category, genre, mood]);
 
   const assign = (t: MockTrack) =>
     setMusic({ trackId: t.id, title: t.title, artist: t.artist, color: t.color, duration: t.duration });
@@ -42,15 +73,18 @@ export function MusicTab() {
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Search tracks, artists, regions..."
+          placeholder="Search Bollywood, Hollywood, artists, albums…"
           className="neon-input w-full pl-9 pr-3 py-2 rounded-lg text-xs"
         />
       </div>
 
+      <Chips label="Category" items={[...CATEGORIES]} value={category} onChange={setCategory} />
       <Chips label="Genre" items={GENRES} value={genre} onChange={setGenre} />
       <Chips label="Mood" items={MOODS} value={mood} onChange={setMood} />
 
-      <div className="space-y-1.5 max-h-[calc(100vh-560px)] overflow-y-auto pr-1">
+      <div className="text-[10px] text-muted-foreground">{tracks.length} tracks</div>
+
+      <div className="space-y-1.5 max-h-[calc(100vh-620px)] overflow-y-auto pr-1">
         {tracks.map((t) => {
           const isPlaying = playing === t.id;
           const isActive = music?.trackId === t.id;
@@ -65,7 +99,7 @@ export function MusicTab() {
               }`}
             >
               <button
-                onClick={() => setPlaying(isPlaying ? null : t.id)}
+                onClick={() => togglePlay(t)}
                 className="h-8 w-8 shrink-0 rounded-md flex items-center justify-center"
                 style={{ background: `${t.color}33`, color: t.color }}
               >
@@ -74,10 +108,10 @@ export function MusicTab() {
 
               <div className="flex-1 min-w-0">
                 <div className="text-xs font-medium truncate">{t.title}</div>
-                <div className="text-[10px] text-muted-foreground flex items-center gap-1.5">
+                <div className="text-[10px] text-muted-foreground flex items-center gap-1.5 flex-wrap">
                   <span className="truncate">{t.artist}</span>
                   <span>·</span>
-                  <span>{t.region}</span>
+                  <span>{t.category}</span>
                   <span>·</span>
                   <span>{t.bpm} BPM</span>
                 </div>

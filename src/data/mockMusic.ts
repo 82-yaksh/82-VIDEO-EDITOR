@@ -20,7 +20,7 @@ export const CATEGORIES = ["Bollywood", "Punjabi", "Hollywood", "Album", "Solo",
 const AUDIO = (n: number) =>
   `https://www.soundhelix.com/examples/mp3/SoundHelix-Song-${((n - 1) % 16) + 1}.mp3`;
 
-export const MOCK_TRACKS: MockTrack[] = [
+const CURATED: MockTrack[] = [
   // ───── Bollywood ─────
   { id: "b1",  title: "Tum Hi Ho",            artist: "Arijit Singh",      region: "India",  genre: "Bollywood", mood: "Romantic", category: "Bollywood", duration: 262, bpm: 88,  color: "#f97316", src: AUDIO(1)  },
   { id: "b2",  title: "Kesariya",             artist: "Pritam · Arijit",   region: "India",  genre: "Bollywood", mood: "Romantic", category: "Bollywood", duration: 268, bpm: 96,  color: "#f59e0b", src: AUDIO(2)  },

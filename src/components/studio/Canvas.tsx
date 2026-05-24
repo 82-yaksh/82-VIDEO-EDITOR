@@ -47,13 +47,13 @@ export function Canvas() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPlaying, total]);
 
-  // sync video element
+  // sync video element (covers video clips AND AI clips with a real stock src)
   useEffect(() => {
-    if (current?.kind === "video" && videoRef.current) {
+    if ((current?.kind === "video" || current?.kind === "ai") && current?.src && videoRef.current) {
       if (isPlaying) videoRef.current.play().catch(() => {});
       else videoRef.current.pause();
     }
-  }, [isPlaying, current?.id, current?.kind]);
+  }, [isPlaying, current?.id, current?.kind, current?.src]);
 
   const visibleOverlays = overlays.filter(
     (o) => playhead >= o.start && playhead < o.start + o.duration,
@@ -107,14 +107,24 @@ export function Canvas() {
                     <video ref={videoRef} src={current.src} className="w-full h-full object-contain" muted />
                   )}
                   {current.kind === "ai" && (
-                    <div
-                      className="w-full h-full flex items-center justify-center text-center p-8 relative overflow-hidden"
-                      style={{ background: current.gradient }}
-                    >
-                      <div className="absolute inset-0 bg-black/30" />
-                      <div className="relative">
-                        <div className="text-[10px] tracking-[0.3em] uppercase mb-2 opacity-80">AI Generated</div>
-                        <div className="text-xl font-bold max-w-md mx-auto leading-tight">{current.prompt}</div>
+                    <div className="w-full h-full relative overflow-hidden bg-black">
+                      {current.src ? (
+                        <video
+                          ref={videoRef}
+                          src={current.src}
+                          className="w-full h-full object-cover"
+                          muted
+                          loop
+                          playsInline
+                          autoPlay
+                        />
+                      ) : (
+                        <div className="w-full h-full" style={{ background: current.gradient }} />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20 pointer-events-none" />
+                      <div className="absolute bottom-4 left-4 right-4 pointer-events-none">
+                        <div className="text-[10px] tracking-[0.3em] uppercase opacity-80 mb-1">AI Generated Scene</div>
+                        <div className="text-sm md:text-base font-semibold leading-tight line-clamp-2">{current.prompt}</div>
                       </div>
                     </div>
                   )}

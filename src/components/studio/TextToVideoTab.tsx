@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { Sparkles, Loader2, Wand2 } from "lucide-react";
 import { useEditor } from "@/store/editor";
 import { PROMPT_PRESETS } from "@/data/mockTemplates";
+import { pickSceneForPrompt } from "@/data/sceneLibrary";
 
 const GRADIENTS = [
   "linear-gradient(135deg,#7c3aed,#06b6d4)",
@@ -21,7 +22,6 @@ export function TextToVideoTab() {
   const generate = async () => {
     const p = prompt.trim() || PROMPT_PRESETS[Math.floor(Math.random() * PROMPT_PRESETS.length)];
     const stages = ["Analyzing prompt…", "Composing scene…", "Rendering frames…", "Polishing…"];
-    setStage(stages[0]);
     setProgress(0);
     for (let i = 0; i < stages.length; i++) {
       setStage(stages[i]);
@@ -30,13 +30,14 @@ export function TextToVideoTab() {
         setProgress((prev) => Math.min(100, prev + 1));
       }
     }
-    const dur = 4 + Math.round(Math.random() * 4);
+    const scene = pickSceneForPrompt(p);
     addClip({
       kind: "ai",
       name: p.slice(0, 32) + (p.length > 32 ? "…" : ""),
       prompt: p,
+      src: scene.src,
       gradient: GRADIENTS[Math.floor(Math.random() * GRADIENTS.length)],
-      duration: dur,
+      duration: scene.duration,
     });
     setStage(null);
     setProgress(0);
@@ -50,7 +51,7 @@ export function TextToVideoTab() {
           <Wand2 size={14} className="text-[oklch(0.7_0.27_330)]" />
           <h3 className="text-sm font-semibold">Text to Video</h3>
         </div>
-        <p className="text-xs text-muted-foreground">Describe a scene. AI will generate it.</p>
+        <p className="text-xs text-muted-foreground">Describe a scene. AI matches it to a cinematic clip.</p>
       </div>
 
       <div className="shining-border rounded-xl">

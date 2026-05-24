@@ -33,6 +33,20 @@ export const MOCK_TRACKS: MockTrack[] = [
   { id: "b9",  title: "Bombay Express",       artist: "Raahi",             region: "India",  genre: "Bollywood", mood: "Energetic",category: "Bollywood", duration: 224, bpm: 118, color: "#f97316", src: AUDIO(9)  },
   { id: "b10", title: "Mumbai Monsoon",       artist: "Ira",               region: "India",  genre: "Bollywood", mood: "Romantic", category: "Bollywood", duration: 248, bpm: 88,  color: "#a78bfa", src: AUDIO(10) },
 
+  // ───── Punjabi ─────
+  { id: "p1",  title: "Jhol",                  artist: "Maanu · Annural Khalid", region: "Pakistan", genre: "Punjabi", mood: "Romantic", category: "Punjabi", duration: 195, bpm: 92,  color: "#22d3ee", src: AUDIO(11) },
+  { id: "p2",  title: "Husn",                  artist: "Anuv Jain",         region: "India",  genre: "Punjabi", mood: "Romantic", category: "Punjabi", duration: 220, bpm: 80,  color: "#f472b6", src: AUDIO(12) },
+  { id: "p3",  title: "Excuses",               artist: "AP Dhillon · Gurinder Gill", region: "Canada", genre: "Punjabi", mood: "Chill",    category: "Punjabi", duration: 187, bpm: 92,  color: "#fb923c", src: AUDIO(13) },
+  { id: "p4",  title: "Talwinder",             artist: "Talwiinder · NDS",  region: "India",  genre: "Punjabi", mood: "Chill",    category: "Punjabi", duration: 198, bpm: 94,  color: "#34d399", src: AUDIO(14) },
+  { id: "p5",  title: "Raat Di Gedi",          artist: "Talwiinder",        region: "India",  genre: "Punjabi", mood: "Chill",    category: "Punjabi", duration: 210, bpm: 90,  color: "#60a5fa", src: AUDIO(15) },
+  { id: "p6",  title: "Insane",                artist: "AP Dhillon",        region: "Canada", genre: "Punjabi", mood: "Energetic",category: "Punjabi", duration: 188, bpm: 118, color: "#f43f5e", src: AUDIO(16) },
+  { id: "p7",  title: "Dhurandhar (Theme)",    artist: "Pritam",            region: "India",  genre: "Cinematic", mood: "Epic", category: "Punjabi", duration: 232, bpm: 108, color: "#ef4444", src: AUDIO(1)  },
+  { id: "p8",  title: "Softly",                artist: "Karan Aujla",       region: "Canada", genre: "Punjabi", mood: "Romantic", category: "Punjabi", duration: 196, bpm: 96,  color: "#a78bfa", src: AUDIO(2)  },
+  { id: "p9",  title: "Tauba Tauba",           artist: "Karan Aujla",       region: "Canada", genre: "Punjabi", mood: "Energetic",category: "Punjabi", duration: 192, bpm: 124, color: "#fb7185", src: AUDIO(3)  },
+  { id: "p10", title: "Laembadgini",           artist: "Diljit Dosanjh",    region: "India",  genre: "Punjabi", mood: "Energetic",category: "Punjabi", duration: 210, bpm: 122, color: "#facc15", src: AUDIO(4)  },
+  { id: "p11", title: "G.O.A.T.",              artist: "Diljit Dosanjh",    region: "India",  genre: "Punjabi", mood: "Energetic",category: "Punjabi", duration: 207, bpm: 120, color: "#fde047", src: AUDIO(5)  },
+  { id: "p12", title: "295",                   artist: "Sidhu Moose Wala",  region: "India",  genre: "Punjabi", mood: "Dark",     category: "Punjabi", duration: 234, bpm: 96,  color: "#64748b", src: AUDIO(6)  },
+
   // ───── Hollywood / Global Pop ─────
   { id: "h1",  title: "Blinding Lights",      artist: "The Weeknd",        region: "USA", genre: "Pop",      mood: "Energetic",category: "Hollywood", duration: 200, bpm: 171, color: "#ef4444", src: AUDIO(11) },
   { id: "h2",  title: "Flowers",              artist: "Miley Cyrus",       region: "USA", genre: "Pop",      mood: "Uplifting",category: "Hollywood", duration: 200, bpm: 118, color: "#f43f5e", src: AUDIO(12) },

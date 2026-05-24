@@ -44,6 +44,28 @@ export function TextToVideoTab() {
     setPrompt("");
   };
 
+  if (stage) {
+    return (
+      <div className="p-5 space-y-5 min-h-[320px] flex flex-col justify-center">
+        <div className="text-center space-y-2">
+          <Loader2 className="animate-spin mx-auto text-[oklch(0.7_0.27_330)]" size={28} />
+          <div className="text-sm font-semibold neon-text">{stage}</div>
+          <div className="text-[11px] text-muted-foreground truncate px-4">"{prompt || "Random scene"}"</div>
+        </div>
+        <div className="space-y-2 px-2">
+          <div className="h-2 rounded-full bg-[oklch(0.2_0.04_275)] overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-[oklch(0.7_0.22_250)] via-[oklch(0.65_0.26_295)] to-[oklch(0.7_0.27_330)]"
+              animate={{ width: `${progress}%` }}
+              transition={{ ease: "linear", duration: 0.05 }}
+            />
+          </div>
+          <div className="text-[11px] text-muted-foreground text-right">{progress}%</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-5 space-y-4">
       <div>
@@ -77,26 +99,13 @@ export function TextToVideoTab() {
       </div>
 
       <button
-        disabled={!!stage}
         onClick={generate}
-        className="glow-button w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 disabled:opacity-70"
+        className="glow-button w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2"
       >
-        {stage ? <Loader2 className="animate-spin" size={16} /> : <Sparkles size={16} />}
-        {stage ? stage : "Generate with AI"}
+        <Sparkles size={16} />
+        Generate with AI
       </button>
-
-      {stage && (
-        <div className="space-y-2">
-          <div className="h-1.5 rounded-full bg-[oklch(0.2_0.04_275)] overflow-hidden">
-            <motion.div
-              className="h-full bg-gradient-to-r from-[oklch(0.7_0.22_250)] via-[oklch(0.65_0.26_295)] to-[oklch(0.7_0.27_330)]"
-              animate={{ width: `${progress}%` }}
-              transition={{ ease: "linear", duration: 0.05 }}
-            />
-          </div>
-          <div className="text-[11px] text-muted-foreground text-right">{progress}%</div>
-        </div>
-      )}
     </div>
   );
 }
+

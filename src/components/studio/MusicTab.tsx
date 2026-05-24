@@ -41,22 +41,35 @@ export function MusicTab() {
     }
   };
 
-  const tracks = useMemo(() => {
+  const { tracks, suggestions } = useMemo(() => {
     const ql = q.toLowerCase().trim();
-    return MOCK_TRACKS.filter((t) => {
+    const base = MOCK_TRACKS.filter((t) => {
       if (category && t.category !== category) return false;
       if (genre && t.genre !== genre) return false;
       if (mood && t.mood !== mood) return false;
-      if (!ql) return true;
-      return (
-        t.title.toLowerCase().includes(ql) ||
-        t.artist.toLowerCase().includes(ql) ||
-        t.region.toLowerCase().includes(ql) ||
-        t.genre.toLowerCase().includes(ql) ||
-        t.category.toLowerCase().includes(ql)
-      );
+      return true;
     });
+    if (!ql) return { tracks: base, suggestions: [] as MockTrack[] };
+
+    // Score each track: substring > token-prefix > fuzzy (Levenshtein) on any field token.
+    const queryTokens = ql.split(/\s+/).filter(Boolean);
+    const scored = base
+      .map((t) => ({ t, score: scoreTrack(t, ql, queryTokens) }))
+      .filter((x) => x.score > 0)
+      .sort((a, b) => b.score - a.score);
+
+    if (scored.length > 0) return { tracks: scored.map((x) => x.t), suggestions: [] };
+
+    // No matches — fall back to fuzzy suggestions across the whole library.
+    const fuzzy = base
+      .map((t) => ({ t, score: fuzzyScore(t, ql, queryTokens) }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 6)
+      .filter((x) => x.score > 0.35)
+      .map((x) => x.t);
+    return { tracks: [], suggestions: fuzzy };
   }, [q, category, genre, mood]);
+
 
   const assign = (t: MockTrack) =>
     setMusic({ trackId: t.id, title: t.title, artist: t.artist, color: t.color, duration: t.duration });
